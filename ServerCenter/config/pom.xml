@@ -1,0 +1,148 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gjjf</groupId>
+    <artifactId>server-center-config</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>server-center-config</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <!--设置字符编码及java版本-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
+        </dependency>
+        <!--用于测试的，本例可省略-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-netflix</artifactId>
+                <version>1.2.2.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!--使用该插件打包-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <!-- develop环境 -->
+            <id>dev</id>
+            <properties>
+                <!--# config-->
+                <eureka.server.port>11001</eureka.server.port>
+
+                <config.server.port>11002</config.server.port>
+                <config.server.name>config-server</config.server.name>
+                <!--# ms-->
+                <user.ms.port>12001</user.ms.port>
+                <user.ms.name>user-ms</user.ms.name>
+                <!--# job-->
+                <data.notify.job.port>13001</data.notify.job.port>
+                <data.notify.job.name>data-notify-job</data.notify.job.name>
+                <!--# api-->
+                <front.api.port>14001</front.api.port>
+                <front.api.name>front-api</front.api.name>
+
+                <!--# Server Center-->
+                <cloud.config.uri>http://localhost:11002/</cloud.config.uri>
+                <cloud.eureka.serviceUrl>http://localhost:11001/eureka</cloud.eureka.serviceUrl>
+
+                <!-- 数据库地址配置 -->
+                <datasource.driverClassName>com.mysql.jdbc.Driver</datasource.driverClassName>
+                <base.datasource.url>
+                    <![CDATA[jdbc:mysql://localhost:3306/crm?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false]]>
+                </base.datasource.url>
+                <base.datasource.username>root</base.datasource.username>
+                <base.datasource.password>123456</base.datasource.password>
+
+                <datasource.maxActive>20</datasource.maxActive>
+                <datasource.initialSize>1</datasource.initialSize>
+                <datasource.maxWait>60000</datasource.maxWait>
+                <datasource.minIdle>1</datasource.minIdle>
+                <datasource.maxIdle>10</datasource.maxIdle>
+                <datasource.poolPreparedStatements>true</datasource.poolPreparedStatements>
+                <datasource.validationQuery>select 'x'</datasource.validationQuery>
+                <datasource.timeBetweenEvictionRunsMillis>60000</datasource.timeBetweenEvictionRunsMillis>
+                <datasource.minEvictableIdleTimeMillis>300000</datasource.minEvictableIdleTimeMillis>
+                <datasource.testWhileIdle>true</datasource.testWhileIdle>
+                <datasource.testOnBorrow>false</datasource.testOnBorrow>
+                <datasource.testOnReturn>false</datasource.testOnReturn>
+                <datasource.filters>stat</datasource.filters>
+
+                <!-- redis配置参数 -->
+                <spring.redis.database>0</spring.redis.database>
+                <spring.redis.host>127.0.0.1</spring.redis.host>
+                <spring.redis.port>6379</spring.redis.port>
+                <spring.redis.password>123456</spring.redis.password>
+                <spring.redis.timeout>1000</spring.redis.timeout>
+                <spring.redis.pool.maxActive>8</spring.redis.pool.maxActive>
+                <spring.redis.pool.maxWait>-1</spring.redis.pool.maxWait>
+                <spring.redis.pool.maxIdle>8</spring.redis.pool.maxIdle>
+                <spring.redis.pool.minIdle>0</spring.redis.pool.minIdle>
+                <spring.redis.pool.maxTotal>20</spring.redis.pool.maxTotal>
+
+                <!-- rabbitmq配置参数 -->
+                <spring.rabbitmq.host>127.0.0.1</spring.rabbitmq.host>
+                <spring.rabbitmq.port>5672</spring.rabbitmq.port>
+                <spring.rabbitmq.username>guest</spring.rabbitmq.username>
+                <spring.rabbitmq.password>guest</spring.rabbitmq.password>
+                <spring.rabbitmq.userCenter.queue>userCenter</spring.rabbitmq.userCenter.queue>
+
+                <!-- 日志级别 -->
+                <logback.level>info</logback.level>
+
+
+            </properties>
+
+        </profile>
+
+    </profiles>
+
+
+</project>

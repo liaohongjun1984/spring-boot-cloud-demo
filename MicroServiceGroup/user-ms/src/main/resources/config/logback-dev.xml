@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration INFO="false">
+	<!-- sends logs to logback-beagle>
+	<consolePlugin / -->
+	<!-- set the logging path -->
+	<property name="LOG_HOME" value="/data/logs/MicroServiceGroup/user-ms" />
+	<property name="CONSOLE_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level -- %class [%3line] -- %msg%n" />
+	<property name="MSG_PATTERN" value="%d{ISO8601} -- %msg%n" />
+	<property name="NORMAL_PATTERN" value="%d{ISO8601} -- %-60.60class [%3line] -- %msg%n" />
+	<property name="SERIOUS_PATTERN" value="%d{ISO8601} [%-16.16thread] %-5level -- %-60.60class [%3line] -- %msg%n" />
+	<timestamp key="byDay" datePattern="yyyyMMdd" />
+	<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<withJansi>false</withJansi>
+		<encoder>
+			<pattern>${CONSOLE_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	<!-- special level : range -->
+	<appender name="WEB_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>ERROR</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/error.%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${SERIOUS_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	<!-- File Appender -->
+	<appender name="WEB_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<file>${LOG_HOME}/INFO.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/INFO.%d{yyyyMMdd}.%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${SERIOUS_PATTERN}</pattern>
+		</encoder>
+	</appender>
+	<appender name="WEB_INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/INFO.%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${NORMAL_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="com.lsmy" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+		<appender-ref ref="WEB_ERROR" />
+	</logger>
+	<logger name="com.jolbox.bonecp" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="com.google" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="javax" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="java" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.springframework" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.springframework.web.servlet.handler.AbstractHandlerExceptionResolve" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.springframework.web.servlet.FrameworkServlet" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.mybatis" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.ibatis" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.apache.ibatis" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="org.apache" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="net.sf" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<logger name="redis.clients" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</logger>
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="WEB_INFO" />
+	</root>
+</configuration>

@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.gjjf</groupId>
+    <artifactId>server-center-eureka</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>server-center-eureka</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <!--设置字符编码及java版本-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- spring-cloud 的依赖包 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+        <!--增加eureka-server的依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-netflix</artifactId>
+                <version>1.2.2.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!--使用该插件打包-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
+    <profiles>
+        <profile>
+            <!-- develop -->
+            <id>dev</id>
+            <properties>
+                <server.port>11001</server.port>
+                <eureka.client.registerWithEureka>false</eureka.client.registerWithEureka>
+                <eureka.client.fetchRegistry>false</eureka.client.fetchRegistry>
+                <eureka.client.serviceUrl.defaultZone>http://localhost:11001/eureka/</eureka.client.serviceUrl.defaultZone>
+                <spring.application.name>eureka_server</spring.application.name>
+
+                <eureka.server.enable-self-preservation>false</eureka.server.enable-self-preservation>
+                <eureka.server.eviction-interval-timer-in-ms>4000</eureka.server.eviction-interval-timer-in-ms>
+                <eureka.client.healthcheck.enabled>true</eureka.client.healthcheck.enabled>
+            </properties>
+
+        </profile>
+
+    </profiles>
+
+
+</project>

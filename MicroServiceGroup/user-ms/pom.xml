@@ -1,0 +1,163 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  
+  <groupId>com.idohoo</groupId>
+  <artifactId>user-ms</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>user-ms</name>
+  <url>http://maven.apache.org</url>
+
+    <properties>   
+        <!--设置字符编码及java版本-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- spring-boot 的依赖包 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <!--用于测试的，本例可省略-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- spring-cloud 的依赖包 -->
+        <!--增加eureka-server的依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+
+        <!-- 第三方依赖包 -->
+        
+        <dependency>
+		  <groupId>com.cfca</groupId>
+		  <artifactId>PKIBASE</artifactId>
+		  <version>1.0</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.cfca</groupId>
+		  <artifactId>CFCACertKitJS</artifactId>
+		  <version>1.0</version>
+		</dependency>
+		<dependency>
+		  <groupId>com.yeepay</groupId>
+		  <artifactId>YeePay_HTMLcommon_V3.0</artifactId>
+		  <version>1.0</version>
+		</dependency>
+        
+
+        <!-- 项目之间的依赖包 -->
+        <dependency>
+        	<groupId>com.idohoo</groupId>
+        	<artifactId>common-utils</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
+        <dependency>
+            <groupId>com.idohoo</groupId>
+            <artifactId>common-db</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.idohoo</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    	<dependency>
+        	<groupId>com.idohoo</groupId>
+       		<artifactId>user-protocol</artifactId>
+        	<version>0.0.1-SNAPSHOT</version>
+    	</dependency>
+    	
+    </dependencies>
+
+   	<!--依赖管理，用于管理spring-cloud的依赖-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-netflix</artifactId>
+                <version>1.2.2.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!--使用该插件打包-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                 </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.1.63:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://192.168.1.63:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<name>local private nexus</name>
+			<url>http://192.168.1.63:8081/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
+</project>

@@ -1,0 +1,192 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+ 
+  <groupId>com.idohoo</groupId>
+  <artifactId>front-api</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>front-api</name>
+  <url>http://maven.apache.org</url>
+
+    <properties>   
+        <!--设置字符编码及java版本-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <dependencies>
+
+		<!-- spring-boot 的依赖包 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-amqp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-redis</artifactId>
+		</dependency>
+
+		<!-- spring-cloud 的依赖包 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-feign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.springframework.cloud</groupId>-->
+			<!--<artifactId>spring-cloud-starter-zipkin</artifactId>-->
+		<!--</dependency>-->
+
+		<!-- 第三方依赖包 -->
+
+		<!-- 项目之间的依赖包 -->
+		<dependency>
+			<groupId>com.idohoo</groupId>
+			<artifactId>common-utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.idohoo</groupId>
+			<artifactId>user-protocol</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+	</dependencies>
+
+    <!--依赖管理，用于管理spring-cloud的依赖-->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-netflix</artifactId>
+                <version>1.2.2.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+
+		<!--<dependencies>-->
+			<!--<dependency>-->
+				<!--<groupId>org.springframework.cloud</groupId>-->
+				<!--<artifactId>spring-cloud-dependencies</artifactId>-->
+				<!--<version>Brixton.RELEASE</version>-->
+				<!--<type>pom</type>-->
+				<!--<scope>import</scope>-->
+			<!--</dependency>-->
+		<!--</dependencies>-->
+
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!--使用该插件打包-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                 </executions>
+            </plugin>
+
+        </plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+			<!--<resource>-->
+				<!--<directory>src/main/resources/key</directory>-->
+				<!--<filtering>false</filtering>-->
+			<!--</resource>-->
+		</resources>
+
+    </build>
+    
+    <distributionManagement>
+		<repository>
+			<id>releases</id>
+			<url>http://192.168.1.63:8081/nexus/content/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<url>http://192.168.1.63:8081/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>nexus</id>
+			<name>local private nexus</name>
+			<url>http://192.168.1.63:8081/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<profiles>
+		<profile>
+			<!-- develop环境 -->
+			<id>develop</id>
+			<properties>
+				<server.port>7019</server.port>
+				<spring.application.name>cashloan-front-api</spring.application.name>
+				<spring.cloud.config.uri>http://localhost:7002</spring.cloud.config.uri>
+				<spring.profiles.active>dev</spring.profiles.active>
+				<cloud.eureka.serviceUrl>http://localhost:7001/eureka/</cloud.eureka.serviceUrl>
+				<spring.cloud.config.name>port,application-name,eureka,data-acq-jdbc,front-api</spring.cloud.config.name>
+				<timeoutInMilliseconds>5000</timeoutInMilliseconds>
+
+				<chang.liang.TNRepaymentSynch.url>http://192.168.1.46:8888</chang.liang.TNRepaymentSynch.url>
+				<bai.rong.payment.data.url>https://sandbox-api.100credit.cn/approval/v1/payment_data</bai.rong.payment.data.url>
+
+			</properties>
+
+		</profile>
+
+		<profile>
+			<!-- test环境 -->
+			<id>test</id>
+			<properties>
+				<server.port>7019</server.port>
+				<spring.application.name>cashloan-front-api</spring.application.name>
+				<spring.cloud.config.uri>http://192.168.1.44:7777/</spring.cloud.config.uri>
+				<spring.profiles.active>dev</spring.profiles.active>
+				<cloud.eureka.serviceUrl>http://192.168.1.44:7011/eureka/</cloud.eureka.serviceUrl>
+				<spring.cloud.config.name>port,application-name,eureka,data-acq-jdbc</spring.cloud.config.name>
+				<timeoutInMilliseconds>5000</timeoutInMilliseconds>
+			</properties>
+
+		</profile>
+
+	</profiles>
+
+</project>
